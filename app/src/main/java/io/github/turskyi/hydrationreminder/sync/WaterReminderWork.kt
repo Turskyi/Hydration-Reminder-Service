@@ -1,7 +1,6 @@
 package io.github.turskyi.hydrationreminder.sync
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import io.github.turskyi.hydrationreminder.sync.ReminderTasks.executeTask
@@ -10,8 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 
-class WaterReminderWork(context: Context, params: WorkerParameters) :
-    Worker(context, params) {
+class WaterReminderWork(context: Context, params: WorkerParameters) : Worker(context, params) {
 
     private val workScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
