@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         //  Checking if we are on Android M or later, if so...
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             /* Getting a BatteryManager instance using getSystemService() */
-            val batteryManager = getSystemService(BATTERY_SERVICE) as BatteryManager
+            val batteryManager: BatteryManager = getSystemService(BATTERY_SERVICE) as BatteryManager
             // Call isCharging on the battery manager and pass the result on to your show
             // charging method
             showCharging(batteryManager.isCharging || batteryManager.equals(BatteryManager.BATTERY_PLUGGED_USB))
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onDestroy() {
         super.onDestroy()
         /** Cleanup the shared preference listener  */
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.unregisterOnSharedPreferenceChangeListener(this)
     }
 
@@ -151,10 +151,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-   inner class ChargingBroadcastReceiver : BroadcastReceiver() {
+    inner class ChargingBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            val isCharging = action == Intent.ACTION_POWER_CONNECTED
+            val action: String? = intent.action
+            val isCharging: Boolean = action == Intent.ACTION_POWER_CONNECTED
             showCharging(isCharging)
         }
     }
