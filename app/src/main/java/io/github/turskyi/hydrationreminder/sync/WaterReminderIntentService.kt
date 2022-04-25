@@ -13,7 +13,7 @@ class WaterReminderIntentService : JobIntentService() {
         const val JOB_ID = 2
     }
     override fun onHandleWork(intent: Intent) {
-        val action = intent.action
+        val action: String? = intent.action
         if (action != null) {
             ReminderTasks.executeTask(this, action)
         }

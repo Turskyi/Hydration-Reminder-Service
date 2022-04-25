@@ -25,12 +25,14 @@ class WaterReminderWork(context: Context, params: WorkerParameters) : Worker(con
      */
     override fun doWork(): Result {
         return try {
-            workScope.executeAsyncTask(doInBackground = {
-                executeTask(applicationContext, ReminderTasks.ACTION_CHARGING_REMINDER)
-            },
+            workScope.executeAsyncTask(
+                doInBackground = {
+                    executeTask(applicationContext, ReminderTasks.ACTION_CHARGING_REMINDER)
+                },
                 onPostExecute = {
                     ReminderUtilities.scheduleChargingReminder(applicationContext)
-                })
+                },
+            )
             Result.success()
         } catch (e: Exception) {
             Result.retry()

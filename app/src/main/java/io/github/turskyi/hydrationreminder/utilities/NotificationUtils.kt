@@ -6,10 +6,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import io.github.turskyi.hydrationreminder.MainActivity
@@ -42,14 +42,13 @@ object NotificationUtils {
     private const val ACTION_IGNORE_PENDING_INTENT_ID = 14
 
     fun clearAllNotifications(context: Context) {
-        val notificationManager =
+        val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
     }
 
     fun remindUserBecauseCharging(context: Context) {
-        Log.d("===>", "notification")
-        val notificationManager =
+        val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val mChannel = NotificationChannel(
@@ -59,7 +58,7 @@ object NotificationUtils {
             )
             notificationManager.createNotificationChannel(mChannel)
         }
-        val notificationBuilder =
+        val notificationBuilder: NotificationCompat.Builder =
             NotificationCompat.Builder(context, WATER_REMINDER_NOTIFICATION_CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_drink_notification)
@@ -101,10 +100,11 @@ object NotificationUtils {
     private fun drinkWaterAction(context: Context): NotificationCompat.Action {
         val incrementWaterCountIntent = Intent(context, WaterReminderIntentService::class.java)
         incrementWaterCountIntent.action = ReminderTasks.ACTION_INCREMENT_WATER_COUNT
-        val incrementWaterPendingIntent = PendingIntent.getBroadcast(
+        val incrementWaterPendingIntent: PendingIntent = PendingIntent.getBroadcast(
             context,
             ACTION_DRINK_PENDING_INTENT_ID,
-            StartJobIntentServiceReceiver.getIntent(context, incrementWaterCountIntent,
+            StartJobIntentServiceReceiver.getIntent(
+                context, incrementWaterCountIntent,
                 WaterReminderIntentService.JOB_ID
             ),
             PendingIntent.FLAG_CANCEL_CURRENT
@@ -128,7 +128,7 @@ object NotificationUtils {
 
     /** returns nullable Bitmap (very important) */
     private fun Context.vectorToBitmap(vector: Int): Bitmap? {
-        val res = resources
+        val res: Resources = resources
         return BitmapFactory.decodeResource(res, vector)
     }
 }

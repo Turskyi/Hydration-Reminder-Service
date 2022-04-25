@@ -4,13 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "io.github.turskyi.hydrationreminder"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0.0"
 
@@ -34,25 +33,23 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-
-    /* for lifecycleScope and coroutine scope */
-    def LIFECYCLE_VERSION = "2.3.1"
+    // for lifecycleScope and coroutine scope
+    def LIFECYCLE_VERSION = "2.4.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$LIFECYCLE_VERSION"
 
-    /* data store */
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    // data store
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
-    /* Work manager (Kotlin + coroutines) */
-    def work_version = "2.5.0"
+    // Work manager (Kotlin + coroutines)
+    def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    /* tests */
+    // tests
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }

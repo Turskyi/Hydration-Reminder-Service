@@ -9,8 +9,8 @@ fun <R> CoroutineScope.executeAsyncTask(
 ): Job {
     return launch {
         onPreExecute?.invoke()
-        /* runs in background thread without blocking the Main Thread */
-        val result = withContext(Dispatchers.IO) {
+        // runs in background thread without blocking the Main Thread
+        val result: R = withContext(Dispatchers.IO) {
             doInBackground()
         }
         onPostExecute?.invoke(result)

@@ -23,26 +23,27 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var mChargingCountDisplay: TextView? = null
     private var mChargingImageView: ImageView? = null
     private var mToast: Toast? = null
-    var mChargingReceiver: ChargingBroadcastReceiver? = null
-    var mChargingIntentFilter: IntentFilter? = null
+    private var mChargingReceiver: ChargingBroadcastReceiver? = null
+    private var mChargingIntentFilter: IntentFilter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        /** Get the views  */
+        // Get the views
         mWaterCountDisplay = findViewById<View>(R.id.tv_water_count) as TextView
         mChargingCountDisplay = findViewById<View>(R.id.tv_charging_reminder_count) as TextView
         mChargingImageView = findViewById<View>(R.id.iv_power_increment) as ImageView
-        /** Set the original values in the UI  */
+        // Set the original values in the UI
         updateWaterCount()
         updateChargingReminderCount()
         ReminderUtilities.scheduleChargingReminder(this)
-        /** Setup the shared preference listener  */
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        // Setup the shared preference listener
+        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this)
 
         /*
-         * Setup and register the broadcast receiver
-         */mChargingIntentFilter = IntentFilter()
+         * Setup and register the broadcast receiver.
+         */
+        mChargingIntentFilter = IntentFilter()
         mChargingReceiver = ChargingBroadcastReceiver()
         mChargingIntentFilter?.addAction(Intent.ACTION_POWER_CONNECTED)
         mChargingIntentFilter?.addAction(Intent.ACTION_POWER_DISCONNECTED)
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
-        /** Determine the current charging state  */
+        // Determine the current charging state
         //  Checking if we are on Android M or later, if so...
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             /* Getting a BatteryManager instance using getSystemService() */
@@ -73,18 +74,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             // for the receiver. Pass in this intent filter as well. Passing in null means that we're
             // getting the current state of a sticky broadcast - the intent returned will contain the
             // battery information we need.
-            val currentBatteryStatusIntent = registerReceiver(null, intentFilter)
+            val currentBatteryStatusIntent: Intent? = registerReceiver(null, intentFilter)
             // Getting the integer extra BatteryManager.EXTRA_STATUS. Checking if it matches
             // BatteryManager.BATTERY_STATUS_CHARGING or BatteryManager.BATTERY_STATUS_FULL. This means
             // the battery is currently charging.
-            val batteryStatus =
+            val batteryStatus: Int? =
                 currentBatteryStatusIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
-            val isCharging = batteryStatus == BatteryManager.BATTERY_STATUS_CHARGING ||
+            val isCharging: Boolean = batteryStatus == BatteryManager.BATTERY_STATUS_CHARGING ||
                     batteryStatus == BatteryManager.BATTERY_STATUS_FULL
             //  Update the UI using your showCharging method
             showCharging(isCharging)
         }
-        /** Register the receiver for future state changes  */
+        // Register the receiver for future state changes
         registerReceiver(mChargingReceiver, mChargingIntentFilter)
     }
 
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
      * Updates the TextView to display the new water count from SharedPreferences
      */
     private fun updateWaterCount() {
-        val waterCount = getWaterCount(this)
+        val waterCount: Int = getWaterCount(this)
         mWaterCountDisplay?.text = waterCount.toString()
     }
 
@@ -105,8 +106,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
      * Updates the TextView to display the new charging reminder count from SharedPreferences
      */
     private fun updateChargingReminderCount() {
-        val chargingReminders = getChargingReminderCount(this)
-        val formattedChargingReminders = resources.getQuantityString(
+        val chargingReminders: Int = getChargingReminderCount(this)
+        val formattedChargingReminders: String = resources.getQuantityString(
             R.plurals.charge_notification_count, chargingReminders, chargingReminders
         )
         mChargingCountDisplay?.text = formattedChargingReminders
@@ -115,8 +116,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     /**
      * Adds one to the water count and shows a toast
      */
-    fun incrementWater(view: View?) {
-        if (mToast != null) mToast!!.cancel()
+    fun incrementWater(@Suppress("UNUSED_PARAMETER") view: View?) {
+        if (mToast != null) {
+            mToast!!.cancel()
+        }
         mToast = Toast.makeText(this, R.string.water_chug_toast, Toast.LENGTH_SHORT)
         mToast?.show()
         val incrementWaterCountIntent = Intent(this, WaterReminderIntentService::class.java)
@@ -124,9 +127,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         WaterReminderIntentService().enqueueWork(this, incrementWaterCountIntent)
     }
 
+    /** Cleanup the shared preference listener  */
     override fun onDestroy() {
         super.onDestroy()
-        /** Cleanup the shared preference listener  */
         val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.unregisterOnSharedPreferenceChangeListener(this)
     }
