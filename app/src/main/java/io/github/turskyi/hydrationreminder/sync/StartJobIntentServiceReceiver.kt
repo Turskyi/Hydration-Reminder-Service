@@ -21,12 +21,12 @@ class StartJobIntentServiceReceiver : BroadcastReceiver() {
          * @param intent an Intent meant for a [androidx.core.app.JobIntentService]
          * @return a new Intent intended for use by this receiver based off the passed intent
          */
-        fun getIntent(context: Context, intent: Intent, job_id: Int): Intent {
+        fun getIntent(context: Context, intent: Intent, jobId: Int): Intent {
             val component: ComponentName =
                 intent.component ?: throw RuntimeException("Missing intent component")
             val newIntent: Intent = Intent(intent)
                 .putExtra(EXTRA_SERVICE_CLASS, component.className)
-                .putExtra(EXTRA_JOB_ID, job_id)
+                .putExtra(EXTRA_JOB_ID, jobId)
             newIntent.setClass(context, StartJobIntentServiceReceiver::class.java)
             return newIntent
         }

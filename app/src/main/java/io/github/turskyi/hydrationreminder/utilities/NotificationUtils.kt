@@ -85,7 +85,8 @@ object NotificationUtils {
         val ignoreReminderPendingIntent = PendingIntent.getBroadcast(
             context,
             ACTION_IGNORE_PENDING_INTENT_ID,
-            StartJobIntentServiceReceiver.getIntent(context, ignoreReminderIntent,
+            StartJobIntentServiceReceiver.getIntent(
+                context, ignoreReminderIntent,
                 WaterReminderIntentService.JOB_ID
             ),
             PendingIntent.FLAG_UPDATE_CURRENT
@@ -107,7 +108,7 @@ object NotificationUtils {
                 context, incrementWaterCountIntent,
                 WaterReminderIntentService.JOB_ID
             ),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         return NotificationCompat.Action(
             R.drawable.ic_local_drink_black_24px,

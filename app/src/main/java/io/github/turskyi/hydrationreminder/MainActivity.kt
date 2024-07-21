@@ -1,6 +1,10 @@
 package io.github.turskyi.hydrationreminder
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
@@ -138,7 +142,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
      * This is a listener that will update the UI when the water count or charging reminder counts
      * change
      */
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         if (PreferenceUtilities.KEY_WATER_COUNT == key) {
             updateWaterCount()
         } else if (PreferenceUtilities.KEY_CHARGING_REMINDER_COUNT == key) {
